@@ -1,0 +1,48 @@
+A list to keep track of which classes are using which other classes
+
+Format:
+Class
++implements this class
+-might have to implement this class of find a work around
+
+DisplayFunctions
+
+UtilityFunctions
++DisplayFunctions
+
+ThreatenHighlightFunctions
++UtilityFunctions
+-CheckmateFunctions (filtering king threaten highlights)
+
+Movement Functions
++UtilityFunctions
++DisplayFunctions
+
+CheckFunctions
++UtilityFunctions
++ThreatenHighlightFunctions
++DisplayFunctions
+
+CheckmateFunctions
++UtilityFunctions
++DisplayFunctions
++CheckFunctions
++MoveHighlightFunctions
+
+HoveHighlightFunctions
++UtilityFunctions
++CheckFunctions
+
+ChessVM
++UtilityFunctions
++DisplayFunctions
++MovementFunctions
++MoveHighlightFunctions
++ThreatenHighlightFunctions
++CheckmateFunctions
+
+Chess.xaml
++ChessVM
++UtilityFunctions
++DisplayFunctions
++MovementFunctions

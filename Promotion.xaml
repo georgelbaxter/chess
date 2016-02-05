@@ -1,0 +1,24 @@
+﻿<Window x:Class="Chess.Promotion"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Promotion" Height="100" Width="220">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="50"/>
+            <ColumnDefinition Width="50"/>
+            <ColumnDefinition Width="50"/>
+            <ColumnDefinition Width="50"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Image Name="imgBlackRook" Grid.Column="1" Source="Images/BlackRookDark.png" Visibility="Visible" MouseDown="imgRook_MouseDown"/>
+        <Image Name="imgBlackKnight" Grid.Column="2" Source="Images/BlackKnightLight.png" Visibility="Visible" MouseDown="imgKnight_MouseDown"/>
+        <Image Name="imgBlackBishop" Grid.Column="3" Source="Images/BlackBishopDark.png" Visibility="Visible" MouseDown="imgBishop_MouseDown"/>
+        <Image Name="imgBlackQueen" Grid.Column="4" Source="Images/BlackQueenLight.png" Visibility="Visible" MouseDown="imgQueen_MouseDown"/>
+
+        <Image Name="imgWhiteRook" Grid.Column="1" Source="Images/WhiteRookLight.png" Visibility="Hidden" MouseDown="imgRook_MouseDown"/>
+        <Image Name="imgWhiteKnight" Grid.Column="2" Source="Images/WhiteKnightDark.png" Visibility="Hidden" MouseDown="imgKnight_MouseDown"/>
+        <Image Name="imgWhiteBishop" Grid.Column="3" Source="Images/WhiteBishopLight.png" Visibility="Hidden" MouseDown="imgBishop_MouseDown"/>
+        <Image Name="imgWhiteQueen" Grid.Column="4" Source="Images/WhiteQueenDark.png" Visibility="Hidden" MouseDown="imgQueen_MouseDown"/>
+    </Grid>
+</Window>
