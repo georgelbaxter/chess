@@ -38,8 +38,8 @@ namespace Chess
         void drawPieces()
         {
             //draw main board
-            for (int row = 0; row < 8; row++)
-                for (int col = 0; col < 8; col++)
+            for (int row = 0; row < Board.Rows; row++)
+                for (int col = 0; col < Board.Cols; col++)
                 {
                     Image tmpImg = new Image();
                     tmpImg.Source = new BitmapImage(new Uri(uf.GetImageFile(cvm.Playfield[row, col], row, col)));
@@ -102,8 +102,8 @@ namespace Chess
             cvm.SelectOrMove(row, col, moveable, threatened, enPassant, ref promote);
             if (promote)
             {
-                string promoteTo = null;
-                while (string.IsNullOrEmpty(promoteTo))
+                Piece.Type promoteTo = new Piece.Type();
+                while (promoteTo == Piece.Type.Empty)
                 {
                     Promotion promo = new Promotion(row, ref promoteTo);
                     promo.ShowDialog();

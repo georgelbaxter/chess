@@ -10,42 +10,42 @@ namespace Chess
     {
         UtilityFunctions uf = new UtilityFunctions();
         CheckFunctions cf = new CheckFunctions();
-        const string pawn = "Pawn", rook = "Rook", knight = "Knight", bishop = "Bishop", queen = "Queen", king = "King", white = "White", black = "Black", empty = "empty";
+
         public void highlightMoveable(Piece piece, Piece[,] board, int row, int col, List<int[]> moveable)
         {
-            switch (piece.Type)
+            switch (piece.PieceType)
             {
-                case (pawn):
-                    pawnMoveHighlight(piece, board, row, col, moveable);
+                case (Piece.Type.Pawn):
+                    pawnMoveHighlight(piece, row, col, moveable, board);
                     break;
-                case (rook):
-                    rookMoveHighlight(piece.Colour, row, col, moveable, board);
+                case (Piece.Type.Rook):
+                    rookMoveHighlight(piece.PieceColour, row, col, moveable, board);
                     break;
-                case (knight):
-                    knightMoveHighlight(piece.Colour, row, col, moveable, board);
+                case (Piece.Type.Knight):
+                    knightMoveHighlight(piece.PieceColour, row, col, moveable, board);
                     break;
-                case (bishop):
-                    bishopMoveHighlight(piece.Colour, row, col, moveable, board);
+                case (Piece.Type.Bishop):
+                    bishopMoveHighlight(piece.PieceColour, row, col, moveable, board);
                     break;
-                case (queen):
-                    queenMoveHighlight(piece.Colour, row, col, moveable, board);
+                case (Piece.Type.Queen):
+                    queenMoveHighlight(piece.PieceColour, row, col, moveable, board);
                     break;
-                case (king):
+                case (Piece.Type.King):
                     kingMoveHighlight(piece, row, col, moveable, board);
                     break;
             }
         }
 
-        void pawnMoveHighlight(Piece piece, Piece[,] board, int row, int col, List<int[]> moveable)
+        void pawnMoveHighlight(Piece piece, int row, int col, List<int[]> moveable, Piece[,] board)
         {
             //moving
-            if (piece.Colour == black && !board[row + 1, col].Exists)
+            if (piece.PieceColour == Piece.Colour.Black && !board[row + 1, col].Exists)
             {
                 addMoveable(piece.Row, piece.Col, 1, 0, moveable, board);
                 if (!piece.HasMoved && !board[piece.Row + 2, piece.Col].Exists)
                     addMoveable(piece.Row, piece.Col, 2, 0, moveable, board);
             }
-            if (piece.Colour == white && !board[row - 1, col].Exists)
+            if (piece.PieceColour == Piece.Colour.White && !board[row - 1, col].Exists)
             {
                 addMoveable(piece.Row, piece.Col, -1, 0, moveable, board);
                 if (!piece.HasMoved && !board[piece.Row - 2, piece.Col].Exists)
@@ -53,7 +53,7 @@ namespace Chess
             }
         }
 
-        void rookMoveHighlight(string colour, int row, int col, List<int[]> moveable, Piece[,] board)
+        void rookMoveHighlight(Piece.Colour colour, int row, int col, List<int[]> moveable, Piece[,] board)
         {
             bool canContinue = true;
             int i = 1;
@@ -97,7 +97,7 @@ namespace Chess
             }
         }
 
-        void knightMoveHighlight(string colour, int row, int col, List<int[]> moveable, Piece[,] board)
+        void knightMoveHighlight(Piece.Colour colour, int row, int col, List<int[]> moveable, Piece[,] board)
         {
             //check down right
             addMoveable(row, col, 2, 1, moveable, board);
@@ -117,7 +117,7 @@ namespace Chess
             addMoveable(row, col, 2, -1, moveable, board);
         }
 
-        void bishopMoveHighlight(string colour, int row, int col, List<int[]> moveable, Piece[,] board)
+        void bishopMoveHighlight(Piece.Colour colour, int row, int col, List<int[]> moveable, Piece[,] board)
         {
             int i = 1;
             bool canContinue = true;
@@ -161,7 +161,7 @@ namespace Chess
             }
         }
 
-        void queenMoveHighlight(string colour, int row, int col, List<int[]> moveable, Piece[,] board)
+        void queenMoveHighlight(Piece.Colour colour, int row, int col, List<int[]> moveable, Piece[,] board)
         {
             //orthogonals
             //check down
@@ -251,62 +251,89 @@ namespace Chess
         void kingMoveHighlight(Piece piece, int row, int col, List<int[]> moveable, Piece[,] board)
         {
             //check down
-            if (!cf.isThreatened(row + 1, col, uf.OtherColour(piece.Colour), board))
+            if (!cf.isThreatened(row + 1, col, uf.OtherColour(piece.PieceColour), board))
                 addMoveable(row, col, 1, 0, moveable, board);
             //check down right
-            if (!cf.isThreatened(row + 1, col + 1, uf.OtherColour(piece.Colour), board))
+            if (!cf.isThreatened(row + 1, col + 1, uf.OtherColour(piece.PieceColour), board))
                 addMoveable(row, col, 1, 1, moveable, board);
             //check right
-            if (!cf.isThreatened(row, col + 1, uf.OtherColour(piece.Colour), board))
+            if (!cf.isThreatened(row, col + 1, uf.OtherColour(piece.PieceColour), board))
                 addMoveable(row, col, 0, 1, moveable, board);
             //check up right
-            if (!cf.isThreatened(row - 1, col + 1, uf.OtherColour(piece.Colour), board))
+            if (!cf.isThreatened(row - 1, col + 1, uf.OtherColour(piece.PieceColour), board))
                 addMoveable(row, col, -1, 1, moveable, board);
             //check up
-            if (!cf.isThreatened(row - 1, col, uf.OtherColour(piece.Colour), board))
+            if (!cf.isThreatened(row - 1, col, uf.OtherColour(piece.PieceColour), board))
                 addMoveable(row, col, -1, 0, moveable, board);
             //check up left
-            if (!cf.isThreatened(row - 1, col - 1, uf.OtherColour(piece.Colour), board))
+            if (!cf.isThreatened(row - 1, col - 1, uf.OtherColour(piece.PieceColour), board))
                 addMoveable(row, col, -1, -1, moveable, board);
             //check left
-            if (!cf.isThreatened(row, col - 1, uf.OtherColour(piece.Colour), board))
+            if (!cf.isThreatened(row, col - 1, uf.OtherColour(piece.PieceColour), board))
                 addMoveable(row, col, 0, -1, moveable, board);
             //check down left
-            if (!cf.isThreatened(row + 1, col - 1, uf.OtherColour(piece.Colour), board))
+            if (!cf.isThreatened(row + 1, col - 1, uf.OtherColour(piece.PieceColour), board))
                 addMoveable(row, col, 1, -1, moveable, board);
             #region castling
             //castling black left
-            if (piece.Colour == black)
+            if (piece.PieceColour == Piece.Colour.Black)
             {
-                if (!piece.HasMoved && !board[0, 0].HasMoved && board[0, 0].Type == rook
-                    && !board[0, 1].Exists && !board[0, 2].Exists && !board[0, 3].Exists
-                    && !cf.isThreatened(0, 2, white, board) && !cf.isThreatened(0, 3, white, board) && !cf.isThreatened(0, 4, white, board))
+                //Check that the king hasn't moved
+                if (!piece.HasMoved 
+                    //and that the left rook hasn't moved
+                    && !board[Board.FirstRow, Board.FirstCol].HasMoved 
+                    //and that it is a rook
+                    && board[Board.FirstRow, Board.FirstCol].PieceType == Piece.Type.Rook
+                    //and that there are no pieces between them
+                    && !board[Board.FirstRow, Board.FirstCol + 1].Exists 
+                    && !board[Board.FirstRow, Board.FirstCol + 2].Exists 
+                    && !board[Board.FirstRow, Board.FirstCol + 3].Exists
+                    //and that king doesn't move through tiles that are threatened by white
+                    && !cf.isThreatened(Board.FirstRow, Board.FirstCol + 2, Piece.Colour.White, board) 
+                    && !cf.isThreatened(Board.FirstRow, Board.FirstCol + 3, Piece.Colour.White, board) 
+                    && !cf.isThreatened(Board.FirstRow, Board.FirstCol + 4, Piece.Colour.White, board))
                 {
-                    moveable.Add(new int[] { 0, 2 });
+                    moveable.Add(new int[] { Board.FirstRow, Board.FirstCol + 2 });
                 }
                 //castling black right
-                if (!piece.HasMoved && !board[0, 7].HasMoved && board[0, 0].Type == rook
-                    && !board[0, 5].Exists && !board[0, 6].Exists
-                    && !cf.isThreatened(0, 4, white, board) && !cf.isThreatened(0, 5, white, board) && !cf.isThreatened(0, 6, white, board))
+                if (!piece.HasMoved 
+                    && !board[Board.FirstRow, Board.LastCol].HasMoved 
+                    && board[Board.FirstRow, Board.LastCol].PieceType == Piece.Type.Rook
+                    && !board[Board.FirstRow, Board.LastCol - 1].Exists 
+                    && !board[Board.FirstRow, Board.LastCol - 2].Exists
+                    && !cf.isThreatened(Board.FirstRow, Board.LastCol - 3, Piece.Colour.White, board) 
+                    && !cf.isThreatened(Board.FirstRow, Board.LastCol - 2, Piece.Colour.White, board) 
+                    && !cf.isThreatened(Board.FirstRow, Board.LastCol - 1, Piece.Colour.White, board))
                 {
-                    moveable.Add(new int[] { 0, 6 });
+                    moveable.Add(new int[] { Board.FirstRow, Board.LastCol - 1 });
                 }
             }
             //castling white left
-            if (piece.Colour == white)
+            if (piece.PieceColour == Piece.Colour.White)
             {
-                if (!piece.HasMoved && !board[7, 0].HasMoved && board[0, 0].Type == rook
-                    && !board[7, 1].Exists && !board[7, 2].Exists && !board[7, 3].Exists
-                    && !cf.isThreatened(7, 2, black, board) && !cf.isThreatened(7, 3, black, board) && !cf.isThreatened(7, 4, black, board))
+                if (!piece.HasMoved 
+                    && !board[Board.LastRow, Board.FirstCol].HasMoved 
+                    && board[Board.LastRow, Board.FirstCol].PieceType == Piece.Type.Rook
+                    && !board[Board.LastRow, Board.FirstCol + 1].Exists 
+                    && !board[Board.LastRow, Board.FirstCol + 2].Exists 
+                    && !board[Board.LastRow, Board.FirstCol + 3].Exists
+                    && !cf.isThreatened(Board.LastRow, Board.FirstCol + 2, Piece.Colour.Black, board) 
+                    && !cf.isThreatened(Board.LastRow, Board.FirstCol + 3, Piece.Colour.Black, board) 
+                    && !cf.isThreatened(Board.LastRow, Board.FirstCol + 4, Piece.Colour.Black, board))
                 {
-                    moveable.Add(new int[] { 7, 2 });
+                    moveable.Add(new int[] { Board.LastRow, Board.FirstCol + 2 });
                 }
                 //castling white right
-                if (!piece.HasMoved && !board[7, 7].HasMoved && board[0, 0].Type == rook
-                    && !board[7, 5].Exists && !board[7, 6].Exists
-                    && !cf.isThreatened(7, 4, black, board) && !cf.isThreatened(7, 5, black, board) && !cf.isThreatened(7, 6, black, board))
+                if (!piece.HasMoved 
+                    && !board[Board.LastRow, Board.LastCol].HasMoved 
+                    && board[Board.LastRow, Board.LastCol].PieceType == Piece.Type.Rook
+                    && !board[Board.LastRow, Board.LastCol - 2].Exists 
+                    && !board[Board.LastRow, Board.LastCol - 1].Exists
+                    && !cf.isThreatened(Board.LastRow, Board.LastCol - 3, Piece.Colour.Black, board) 
+                    && !cf.isThreatened(Board.LastRow, Board.LastCol - 2, Piece.Colour.Black, board) 
+                    && !cf.isThreatened(Board.LastRow, Board.LastCol - 1, Piece.Colour.Black, board))
                 {
-                    moveable.Add(new int[] { 7, 6 });
+                    moveable.Add(new int[] { Board.LastRow, Board.LastCol - 1 });
                 }
             }
             #endregion
@@ -319,7 +346,8 @@ namespace Chess
             int destinationCol = col + colOffset;
             if (uf.IsInBounds(destinationRow, destinationCol))
             {
-                if (board[destinationRow, destinationCol].Colour != board[row, col].Colour && !cf.createCheck(row, col, destinationRow, destinationCol, board))
+                if (board[destinationRow, destinationCol].PieceColour != board[row, col].PieceColour 
+                    && !cf.createCheck(row, col, destinationRow, destinationCol, board))
                 {
                     moveable.Add(new int[] { destinationRow, destinationCol });
                     added = true;

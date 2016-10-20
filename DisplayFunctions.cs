@@ -5,17 +5,20 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
-//deals with text to say check, checkmate {colour}, and stalemate
-//also deals with displaying images of taken pieces on the side
+//deals with text to say check, checkmate <colour>, and stalemate
+//and deals with displaying images of the taken pieces on the side
 namespace Chess
 {
     class DisplayFunctions : INotifyPropertyChanged
     {
+        static DisplayFunctions displayFunctions;
+
+        //Constructors
         private DisplayFunctions()
         {
             DisplayText = "Welcome";
         }
-        static DisplayFunctions displayFunctions;
+
         public static DisplayFunctions GetInstance()
         {
             if(displayFunctions == null)
@@ -23,29 +26,33 @@ namespace Chess
             return displayFunctions;
         }
 
+        //Property
         string displayText;
         public string DisplayText
         {
             get { return displayText; }
             set { displayText = value; OnPropertyChanged(); }
         }
-        string white = "White", black = "Black";
+
+        //Methods
         public void AddTaken(Piece piece, Piece[,] whiteTaken, Piece[,] blackTaken, int[] whiteTakenIndeces, int[] blackTakenIndeces)
         {
-            if (piece.Colour == white)
+            if (piece.PieceColour == Piece.Colour.White)
             {
-                whiteTaken[whiteTakenIndeces[0], whiteTakenIndeces[1]] = piece;
-                whiteTakenIndeces[1]++;
-                whiteTakenIndeces[0] += whiteTakenIndeces[1] / 2;
-                whiteTakenIndeces[1] %= 2;
+                addTaken(piece, whiteTaken, whiteTakenIndeces);
             }
-            if (piece.Colour == black)
+            if (piece.PieceColour == Piece.Colour.Black)
             {
-                blackTaken[blackTakenIndeces[0], blackTakenIndeces[1]] = piece;
-                blackTakenIndeces[1]++;
-                blackTakenIndeces[0] += blackTakenIndeces[1] / 2;
-                blackTakenIndeces[1] %= 2;
+                addTaken(piece, blackTaken, blackTakenIndeces);
             }
+        }
+
+        void addTaken(Piece piece, Piece[,] takenGrid, int[] takenIndeces)
+        {
+            takenGrid[takenIndeces[0], takenIndeces[1]] = piece;
+            takenIndeces[1]++;
+            takenIndeces[0] += takenIndeces[1] / 2;
+            takenIndeces[1] %= 2;
         }
 
         public void Check()
@@ -53,7 +60,7 @@ namespace Chess
             DisplayText = "Check!";
         }
 
-        public void Checkmate(string colour)
+        public void Checkmate(Piece.Colour colour)
         {
             DisplayText = "Checkmate " + colour + "!";
         }

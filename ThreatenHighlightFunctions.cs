@@ -9,37 +9,38 @@ namespace Chess
     class ThreatenHighlightFunctions
     {
         UtilityFunctions uf = new UtilityFunctions();
-        const string pawn = "Pawn", rook = "Rook", knight = "Knight", bishop = "Bishop", queen = "Queen", king = "King", white = "White", black = "Black", empty = "empty";
 
         public void highlightThreatened(Piece piece, int row, int col, List<int[]> threatened, List<int[]> enPassant, Piece[,] board, bool filtered = true)
         {
-            switch (piece.Type)
+            switch (piece.PieceType)
             {
-                case (pawn):
-                    pawnThreatenHighlight(piece, board, row, col, threatened, enPassant);
+                case (Piece.Type.Pawn):
+                    pawnThreatenHighlight(piece, row, col, threatened, board, enPassant);
                     break;
-                case (rook):
-                    rookThreatenHighlight(piece.Colour, row, col, threatened, board);
+                case (Piece.Type.Rook):
+                    rookThreatenHighlight(piece.PieceColour, row, col, threatened, board);
                     break;
-                case (knight):
-                    knightThreatenHighlight(piece.Colour, row, col, threatened);
+                case (Piece.Type.Knight):
+                    knightThreatenHighlight(piece.PieceColour, row, col, threatened);
                     break;
-                case (bishop):
-                    bishopThreatenHighlight(piece.Colour, row, col, threatened, board);
+                case (Piece.Type.Bishop):
+                    bishopThreatenHighlight(piece.PieceColour, row, col, threatened, board);
                     break;
-                case (queen):
-                    queenThreatenHighlight(piece.Colour, row, col, threatened, board);
+                case (Piece.Type.Queen):
+                    queenThreatenHighlight(piece.PieceColour, row, col, threatened, board);
                     break;
-                case (king):
+                case (Piece.Type.King):
                     kingThreatenedHighlight(piece, row, col, threatened);
                     break;
+                default:
+                    throw new NotImplementedException("Attempted to move a non existent piece type");
             }
             //filtered list only squares that can be moved to, ie. not pieces of the same colour, (need to add) or threatened pieces of the other colour for kings
             if (filtered)
             {
                 List<int[]> toRemove = new List<int[]>();
                 foreach (int[] pair in threatened)
-                    if (board[row, col].Colour == board[pair[0], pair[1]].Colour)
+                    if (board[row, col].PieceColour == board[pair[0], pair[1]].PieceColour)
                         toRemove.Add(pair);
                 //if (piece.Type == king)
                 //    foreach (int[] pair in threatened)
@@ -50,33 +51,33 @@ namespace Chess
             }
         }
 
-        void pawnThreatenHighlight(Piece piece, Piece[,] board, int row, int col, List<int[]> threatened, List<int[]> enPassant)
+        void pawnThreatenHighlight(Piece piece, int row, int col, List<int[]> threatened, Piece[,] board, List<int[]> enPassant)
         {
             //capturing
-            if (piece.Colour == black)
+            if (piece.PieceColour == Piece.Colour.Black)
             {
-                addThreatened(piece.Colour, piece.Row, piece.Col, 1, 1, threatened);
-                addThreatened(piece.Colour, piece.Row, piece.Col, 1, -1, threatened);
+                addThreatened(piece.PieceColour, piece.Row, piece.Col, 1, 1, threatened);
+                addThreatened(piece.PieceColour, piece.Row, piece.Col, 1, -1, threatened);
             }
-            if (piece.Colour == white)
+            if (piece.PieceColour == Piece.Colour.White)
             {
-                addThreatened(piece.Colour, piece.Row, piece.Col, -1, 1, threatened);
-                addThreatened(piece.Colour, piece.Row, piece.Col, -1, -1, threatened);
+                addThreatened(piece.PieceColour, piece.Row, piece.Col, -1, 1, threatened);
+                addThreatened(piece.PieceColour, piece.Row, piece.Col, -1, -1, threatened);
             }
             //en passant
-            if (piece.Colour == black)
+            if (piece.PieceColour == Piece.Colour.Black)
             {
-                addEnPassant(piece.Colour, piece.Row, piece.Col, 1, 1, enPassant, board);
-                addEnPassant(piece.Colour, piece.Row, piece.Col, 1, -1, enPassant, board);
+                addEnPassant(piece.PieceColour, piece.Row, piece.Col, 1, 1, enPassant, board);
+                addEnPassant(piece.PieceColour, piece.Row, piece.Col, 1, -1, enPassant, board);
             }
-            if (piece.Colour == white)
+            if (piece.PieceColour == Piece.Colour.White)
             {
-                addEnPassant(piece.Colour, piece.Row, piece.Col, -1, 1, enPassant, board);
-                addEnPassant(piece.Colour, piece.Row, piece.Col, -1, -1, enPassant, board);
+                addEnPassant(piece.PieceColour, piece.Row, piece.Col, -1, 1, enPassant, board);
+                addEnPassant(piece.PieceColour, piece.Row, piece.Col, -1, -1, enPassant, board);
             }
         }
 
-        void rookThreatenHighlight(string colour, int row, int col, List<int[]> threatened, Piece[,] board)
+        void rookThreatenHighlight(Piece.Colour colour, int row, int col, List<int[]> threatened, Piece[,] board)
         {
             int i = 1;
             //check down
@@ -112,7 +113,7 @@ namespace Chess
             }
         }
 
-        void knightThreatenHighlight(string colour, int row, int col, List<int[]> threatened)
+        void knightThreatenHighlight(Piece.Colour colour, int row, int col, List<int[]> threatened)
         {
             //check down right
             addThreatened(colour, row, col, 2, 1, threatened);
@@ -132,7 +133,7 @@ namespace Chess
             addThreatened(colour, row, col, 2, -1, threatened);
         }
 
-        void bishopThreatenHighlight(string colour, int row, int col, List<int[]> threatened, Piece[,] board)
+        void bishopThreatenHighlight(Piece.Colour colour, int row, int col, List<int[]> threatened, Piece[,] board)
         {
             int i = 1;
             //check down right
@@ -168,7 +169,7 @@ namespace Chess
             }
         }
 
-        void queenThreatenHighlight(string colour, int row, int col, List<int[]> threatened, Piece[,] board)
+        void queenThreatenHighlight(Piece.Colour colour, int row, int col, List<int[]> threatened, Piece[,] board)
         {
             int i = 1;
             //check down
@@ -238,17 +239,17 @@ namespace Chess
 
         void kingThreatenedHighlight(Piece piece, int row, int col, List<int[]> threatened)
         {
-            addThreatened(piece.Colour, row, col, 1, 0, threatened);
-            addThreatened(piece.Colour, row, col, 1, 1, threatened);
-            addThreatened(piece.Colour, row, col, 0, 1, threatened);
-            addThreatened(piece.Colour, row, col, -1, 1, threatened);
-            addThreatened(piece.Colour, row, col, -1, 0, threatened);
-            addThreatened(piece.Colour, row, col, -1, -1, threatened);
-            addThreatened(piece.Colour, row, col, 0, -1, threatened);
-            addThreatened(piece.Colour, row, col, 1, -1, threatened);
+            addThreatened(piece.PieceColour, row, col, 1, 0, threatened);
+            addThreatened(piece.PieceColour, row, col, 1, 1, threatened);
+            addThreatened(piece.PieceColour, row, col, 0, 1, threatened);
+            addThreatened(piece.PieceColour, row, col, -1, 1, threatened);
+            addThreatened(piece.PieceColour, row, col, -1, 0, threatened);
+            addThreatened(piece.PieceColour, row, col, -1, -1, threatened);
+            addThreatened(piece.PieceColour, row, col, 0, -1, threatened);
+            addThreatened(piece.PieceColour, row, col, 1, -1, threatened);
         }
 
-        bool addThreatened(string colour, int row, int col, int rowOffset, int colOffset, List<int[]> threatened)
+        bool addThreatened(Piece.Colour colour, int row, int col, int rowOffset, int colOffset, List<int[]> threatened)
         {
             bool added = false;
             int destinationRow = row + rowOffset;
@@ -261,11 +262,12 @@ namespace Chess
             return added;
         }
 
-        void addEnPassant(string colour, int row, int col, int rowOffset, int colOffset, List<int[]> enPassant, Piece[,] board)
+        void addEnPassant(Piece.Colour colour, int row, int col, int rowOffset, int colOffset, List<int[]> enPassant, Piece[,] board)
         {
             int destinationRow = row + rowOffset;
             int destinationCol = col + colOffset;
-            if (destinationRow >= 0 && destinationRow <= 7 && destinationCol >= 0 && destinationCol <= 7 && board[row, col + colOffset].EnPassant)
+            if (destinationRow >= Board.FirstRow && destinationRow <= Board.LastRow && destinationCol >= Board.FirstCol 
+                && destinationCol <= Board.LastCol && board[row, col + colOffset].EnPassant)
             {
                 enPassant.Add(new int[] { destinationRow, destinationCol });
             }

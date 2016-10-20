@@ -12,16 +12,16 @@ namespace Chess
         ThreatenHighlightFunctions thm = new ThreatenHighlightFunctions();
         DisplayFunctions df = DisplayFunctions.GetInstance();
 
-        public bool isThreatened(int row, int col, string threatenedBy, Piece[,] board)
+        public bool isThreatened(int row, int col, Piece.Colour threatenedBy, Piece[,] board)
         {
             bool threatened = false;
             List<int[]> covered = new List<int[]>();
             List<int[]> filler = new List<int[]>();
-            for (int rows = 0; rows < 8; rows++)
+            for (int rows = 0; rows < Board.Rows; rows++)
             {
-                for (int cols = 0; cols < 8; cols++)
+                for (int cols = 0; cols < Board.Cols; cols++)
                 {
-                    if (board[rows, cols].Colour == threatenedBy)
+                    if (board[rows, cols].PieceColour == threatenedBy)
                     {
                         thm.highlightThreatened(board[rows, cols], rows, cols, covered, filler, board, false);
                     }
@@ -38,7 +38,7 @@ namespace Chess
             return threatened;
         }
 
-        public bool isThreatened(int[] indeces, string threatenedBy, Piece[,] board)
+        public bool isThreatened(int[] indeces, Piece.Colour threatenedBy, Piece[,] board)
         {
             return isThreatened(indeces[0], indeces[1], threatenedBy, board);
         }
@@ -51,11 +51,11 @@ namespace Chess
 
         public bool createCheck(int[] moveFrom, int[] moveTo, Piece[,] board)
         {
-            string colour = board[moveFrom[0], moveFrom[1]].Colour;
-            Piece[,] tmpPlayfield = new Piece[8, 8];
+            Piece.Colour colour = board[moveFrom[0], moveFrom[1]].PieceColour;
+            Piece[,] tmpPlayfield = new Piece[Board.Rows, Board.Cols];
             //clone playfield
-            for (int row = 0; row < 8; row++)
-                for (int col = 0; col < 8; col++)
+            for (int row = 0; row < Board.Rows; row++)
+                for (int col = 0; col < Board.Cols; col++)
                     tmpPlayfield[row, col] = new Piece(board[row, col]);
             //move piece
             tmpPlayfield[moveTo[0], moveTo[1]] = tmpPlayfield[moveFrom[0], moveFrom[1]];

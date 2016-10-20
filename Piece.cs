@@ -8,17 +8,17 @@ namespace Chess
 {
     public class Piece
     {
-        string colour = "empty";
-        public string Colour
+        Colour pieceColour = Colour.Empty;
+        public Colour PieceColour
         {
-            get { return colour; }
-            set { colour = value; }
+            get { return pieceColour; }
+            set { pieceColour = value; }
         }
-        string type = "empty";
-        public string Type
+        Type Piecetype = Type.Empty;
+        public Type PieceType
         {
-            get { return type; }
-            set { type = value; }
+            get { return Piecetype; }
+            set { Piecetype = value; }
         }
         bool exists = false;
         public bool Exists
@@ -51,10 +51,28 @@ namespace Chess
             set { col = value; }
         }
 
+        public enum Colour
+        {
+            Empty,
+            Black,
+            White
+        }
+
+        public enum Type
+        {
+            Empty,
+            Pawn,
+            Rook,
+            Knight,
+            Bishop,
+            Queen,
+            King
+        }
+
         public Piece(Piece piece)
         {
-            Colour = piece.Colour;
-            Type = piece.Type;
+            PieceColour = piece.PieceColour;
+            PieceType = piece.PieceType;
             Exists = piece.Exists;
             HasMoved = piece.HasMoved;
             EnPassant = piece.EnPassant;
@@ -63,7 +81,6 @@ namespace Chess
         }
 
         public Piece()
-        {
-        }
+        { }
     }
 }

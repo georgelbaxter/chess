@@ -13,7 +13,7 @@ namespace Chess
         CheckFunctions cf = new CheckFunctions();
         MoveHighlightFunctions mhf = new MoveHighlightFunctions();
 
-        public void checkForCheck(Piece[,] board, string colour)
+        public void checkForCheck(Piece[,] board, Piece.Colour colour)
         {
             if (cf.isThreatened(uf.FindKing(uf.OtherColour(colour), board), colour, board))
                 df.Check();
@@ -21,16 +21,16 @@ namespace Chess
                 df.Clear();
         }
 
-        public void checkForCheckmate(Piece[,] board, string colour, bool gameDone)
+        public void checkForCheckmate(Piece[,] board, Piece.Colour colour, bool gameDone)
         {
             //runs after each move, still the piece that just moved's turn
             bool checkmate = true;
             List<int[]> toMove = new List<int[]>();
-            for (int row = 0; row < 8; row++)
+            for (int row = 0; row < Board.Rows; row++)
             {
-                for (int col = 0; col < 8; col++)
+                for (int col = 0; col < Board.Cols; col++)
                 {
-                    if (board[row, col].Colour == uf.OtherColour(colour))
+                    if (board[row, col].PieceColour == uf.OtherColour(colour))
                         mhf.highlightMoveable(board[row, col], board, row, col, toMove);
                     if (toMove.Count > 0)
                     {

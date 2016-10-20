@@ -20,8 +20,8 @@ namespace Chess
     public partial class Promotion : Window
     {
         ChessVM cvm;
-        string promoteTo;
-        public Promotion(int row, ref string promoteTo)
+        Piece.Type promoteTo;
+        public Promotion(int row, ref Piece.Type promoteTo)
         {
             cvm = new ChessVM();
             InitializeComponent();
@@ -34,32 +34,32 @@ namespace Chess
             }
         }
 
-        public string PromoteTo()
+        public Piece.Type PromoteTo()
         {
             return promoteTo;
         }
 
         private void imgRook_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            promoteTo = "Rook";
+            promoteTo = Piece.Type.Rook;
             this.Close();
         }
 
         private void imgKnight_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            promoteTo = "Knight";
+            promoteTo = Piece.Type.Knight;
             this.Close();
         }
 
         private void imgBishop_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            promoteTo = "Bishop";
+            promoteTo = Piece.Type.Bishop;
             this.Close();
         }
 
         private void imgQueen_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            promoteTo = "Queen";
+            promoteTo = Piece.Type.Queen;
             this.Close();
         }
     }
